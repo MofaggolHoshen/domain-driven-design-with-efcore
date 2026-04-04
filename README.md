@@ -6,22 +6,6 @@ A practical implementation of Domain-Driven Design (DDD) tactical patterns with 
 
 This project demonstrates how to build a rich domain model using DDD principles with Entity Framework Core. The implementation focuses on the **Order Context** domain, showcasing how to properly structure entities, value objects, and their persistence using EF Core.
 
-## 📁 Project Structure
-
-```
-DddWithEntityFrameworkCore/
-│
-├── OrderContext.Domain/           # Domain Layer
-│   ├── Client.cs                  # Entity (Aggregate Root)
-│   └── Email.cs                   # Value Object
-│
-├── OrderContext.Infrastructure/   # Infrastructure Layer
-│   ├── OrderDbContext.cs          # EF Core DbContext
-│   └── ClientConfiguration.cs     # EF Core Entity Configuration
-│
-└── OrderContext.Tests/            # Unit Tests
-```
-
 ## 📚 DDD Concepts - Step by Step
 
 This project explains DDD concepts incrementally. Each concept is detailed in a separate document:
@@ -139,10 +123,6 @@ Each branch introduces a new concept with practical implementation.
 ## 🤝 Contributing
 
 This is an educational project. Feel free to fork and experiment!
-
-## 📄 License
-
-MIT License - See LICENSE file for details
 
 ---
 
