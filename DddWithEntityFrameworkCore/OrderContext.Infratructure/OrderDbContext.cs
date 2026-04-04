@@ -7,7 +7,7 @@ namespace OrderContext.Infratructure;
 
 public class OrderDbContext(DbContextOptions<OrderDbContext> options) : DbContext(options)
 {
-    public DbSet<Client> Customers { get; set; }
+    public DbSet<Client> Clients { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

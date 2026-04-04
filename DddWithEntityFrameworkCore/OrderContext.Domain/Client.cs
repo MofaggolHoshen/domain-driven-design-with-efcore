@@ -14,6 +14,10 @@ public class Client
     public Email Email { get; private set; } 
     public DateTime CreatedAt { get; private set; }
 
+    private Client()
+    {
+        
+    }
     public Client(Guid id, string name, Email email)
     {
         Id = id != Guid.Empty ? id : throw new ArgumentException("Customer ID cannot be empty!");
