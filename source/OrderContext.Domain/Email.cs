@@ -1,10 +1,11 @@
-﻿using System;
+﻿using OrderContext.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace OrderContext.Domain;
 
-public class Email
+public class Email : ValueObject
 {
     private readonly string _value;
     public string Value => _value;
@@ -14,6 +15,7 @@ public class Email
         _value = null!;
     }
 
+   
     private Email(string value)
     {
         _value = value;
@@ -27,6 +29,11 @@ public class Email
             throw new ArgumentException("Invalid email format!");
 
         return new Email(email);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return _value;
     }
 
 }
