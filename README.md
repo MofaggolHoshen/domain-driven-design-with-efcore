@@ -12,12 +12,12 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 
 1. **[Entity](./docs/Entity.md)** ✅ - Objects with unique identity (Client example)
 2. **[Value Object](./docs/ValueObject.md)** ✅ - Immutable objects defined by their values (Email example)
-3. **[Aggregate](./docs/Aggregate.md)** - Cluster of objects treated as a unit
+3. **[Aggregate](./docs/Aggregate.md)** ✅ - Cluster of objects treated as a unit (Client + Email example)
 4. **[Domain Service](./docs/DomainService.md)** - Business logic that doesn't belong to entities
 5. **[Repository](./docs/Repository.md)** - Abstraction for data access
 6. **[Domain Event](./docs/DomainEvent.md)** - Significant occurrences in the domain
 
-> **Note**: Concepts are explained as they are implemented in different branches. Currently on branch: `value-object-in-ef`
+> **Note**: Concepts are explained as they are implemented in different branches. Currently on branch: `main`
 
 ## 🔧 Key Implementation Highlights
 
@@ -26,11 +26,12 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 - **Email Value Object**: Immutable type with built-in validation
 - **Private Setters**: Enforces encapsulation and prevents invalid state
 - **Factory Methods**: Ensures objects are always created in valid state
+- **Value Conversion**: EF Core mapping for value objects
 
 ### Infrastructure Layer
 - **EF Core DbContext**: `OrderDbContext` for data persistence
 - **Fluent API Configuration**: `ClientConfiguration` for entity mapping
-- **Value Object Mapping**: Using `OwnsOne` to persist Email inline
+- **Value Object Mapping**: Using `HasConversion` to persist Email as string
 
 ### Design Patterns Applied
 - ✅ Factory Method Pattern
@@ -69,36 +70,41 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
    dotnet test
    ```
 
-## 💡 Current Branch: `value-object-in-ef`
+## 💡 Current Branch: `main`
 
-This branch focuses on implementing **Value Objects** in Domain-Driven Design with Entity Framework Core.
+This branch contains the complete implementation of **Entities**, **Value Objects**, and **Aggregates** in Domain-Driven Design with Entity Framework Core.
 
 ### What's Covered:
-- Creating immutable value objects
+- Creating entities with encapsulated business logic
+- Implementing immutable value objects
 - Using private constructors and factory methods
-- Implementing value-based equality
-- Configuring value objects in EF Core with `OwnsOne`
-- Fighting primitive obsession
+- Understanding Aggregate Root responsibilities
+- Configuring value objects in EF Core with `HasConversion`
+- Best practices for aggregate design
 
 ### Key Files:
+- `OrderContext.Domain/Client.cs` - Aggregate Root implementation
 - `OrderContext.Domain/Email.cs` - Value Object implementation
-- `OrderContext.Domain/Client.cs` - Entity using value object
-- `OrderContext.Infrastructure/ClientConfiguration.cs` - EF Core `OwnsOne` configuration
+- `OrderContext.Domain/Common/ValueObject.cs` - Base class for value objects
+- `OrderContext.Infrastructure/ClientConfiguration.cs` - EF Core configuration
 
-See the [Value Object documentation](./docs/ValueObject.md) for detailed explanation.
+See the documentation for detailed explanations:
+- [Entity documentation](./docs/Entity.md)
+- [Value Object documentation](./docs/ValueObject.md)
+- [Aggregate documentation](./docs/Aggregate.md)
 
 ## 📖 Learning Path
 
 This is an educational project designed to teach DDD concepts step by step:
 
 1. **Entities** ✅ - Understanding identity and lifecycle
-2. **Value Objects** ✅ (Current) - Immutability and equality
-3. **Build Aggregates** - Consistency boundaries
-4. **Add Domain Services** - Cross-entity logic
-5. **Implement Repositories** - Data access abstraction
-6. **Introduce Domain Events** - Decoupled communication
+2. **Value Objects** ✅ - Immutability and equality
+3. **Aggregates** ✅ - Consistency boundaries and Aggregate Root
+4. **Domain Services** - Cross-entity logic
+5. **Repositories** - Data access abstraction
+6. **Domain Events** - Decoupled communication
 
-Each branch introduces a new concept with practical implementation.
+Each concept is documented with practical implementation examples.
 
 ## 🎓 Best Practices Demonstrated
 
@@ -109,6 +115,8 @@ Each branch introduces a new concept with practical implementation.
 5. **Separation of Concerns** - Domain vs Infrastructure
 6. **Rich Domain Model** - Business logic in the domain
 7. **Ubiquitous Language** - Code reflects business concepts
+8. **Aggregate Design** - Small aggregates, reference by ID
+9. **Value Conversion** - EF Core mapping for value objects
 
 ## 📚 Resources
 
