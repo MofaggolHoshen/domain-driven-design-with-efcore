@@ -13,17 +13,22 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 1. **[Entity](./docs/Entity.md)** ✅ - Objects with unique identity (Client example)
 2. **[Value Object](./docs/ValueObject.md)** ✅ - Immutable objects defined by their values (Email example)
 3. **[Aggregate](./docs/Aggregate.md)** ✅ - Cluster of objects treated as a unit (Client + Email example)
-4. **[Domain Service](./docs/DomainService.md)** - Business logic that doesn't belong to entities
+4. **[Domain Service](./docs/DomainService.md)** ✅ - Business logic that doesn't belong to entities
 5. **[Repository](./docs/Repository.md)** - Abstraction for data access
 6. **[Domain Event](./docs/DomainEvent.md)** - Significant occurrences in the domain
 
-> **Note**: Concepts are explained as they are implemented in different branches. Currently on branch: `main`
+> **Note**: Concepts are explained as they are implemented in different branches. Currently on branch: `domain-service-in-ef`
 
 ## 🔧 Key Implementation Highlights
 
 ### Domain Layer
 - **Client Entity**: Aggregate root with encapsulated business logic
 - **Email Value Object**: Immutable type with built-in validation
+- **Domain Services**: Stateless operations for cross-entity business logic
+  - `IEmailUniquenessChecker` - Validates email uniqueness across clients
+  - `ClientRegistrationService` - Handles client registration with validation
+  - `ClientTransferService` - Manages client email updates
+- **DomainException**: Custom exception for domain rule violations
 - **Private Setters**: Enforces encapsulation and prevents invalid state
 - **Factory Methods**: Ensures objects are always created in valid state
 - **Value Conversion**: EF Core mapping for value objects
@@ -32,12 +37,16 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 - **EF Core DbContext**: `OrderDbContext` for data persistence
 - **Fluent API Configuration**: `ClientConfiguration` for entity mapping
 - **Value Object Mapping**: Using `HasConversion` to persist Email as string
+- **Domain Service Implementations**: Infrastructure-dependent implementations
+  - `EmailUniquenessChecker` - Uses DbContext to check email uniqueness
 
 ### Design Patterns Applied
 - ✅ Factory Method Pattern
 - ✅ Encapsulation
 - ✅ Immutability (Value Objects)
 - ✅ Aggregate Pattern
+- ✅ Domain Service Pattern
+- ✅ Dependency Injection
 - ✅ Repository Pattern (coming soon)
 
 ## 🚀 Getting Started
@@ -70,28 +79,35 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
    dotnet test
    ```
 
-## 💡 Current Branch: `main`
+## 💡 Current Branch: `domain-service-in-ef`
 
-This branch contains the complete implementation of **Entities**, **Value Objects**, and **Aggregates** in Domain-Driven Design with Entity Framework Core.
+This branch contains the implementation of **Domain Services** in Domain-Driven Design with Entity Framework Core.
 
 ### What's Covered:
-- Creating entities with encapsulated business logic
-- Implementing immutable value objects
-- Using private constructors and factory methods
-- Understanding Aggregate Root responsibilities
-- Configuring value objects in EF Core with `HasConversion`
-- Best practices for aggregate design
+- Creating stateless domain services for cross-entity logic
+- Understanding when to use domain services vs application services
+- Interface placement in Domain Layer, implementation placement based on dependencies
+- Dependency injection for domain services
+- Testing domain services with mocking
 
 ### Key Files:
 - `OrderContext.Domain/Client.cs` - Aggregate Root implementation
 - `OrderContext.Domain/Email.cs` - Value Object implementation
 - `OrderContext.Domain/Common/ValueObject.cs` - Base class for value objects
+- `OrderContext.Domain/Common/DomainException.cs` - Domain rule violation exception
+- `OrderContext.Domain/Services/IEmailUniquenessChecker.cs` - Domain service interface
+- `OrderContext.Domain/Services/IClientRegistrationService.cs` - Registration service interface
+- `OrderContext.Domain/Services/IClientTransferService.cs` - Transfer service interface
+- `OrderContext.Domain/Services/ClientRegistrationService.cs` - Domain layer implementation
+- `OrderContext.Domain/Services/ClientTransferService.cs` - Domain layer implementation
+- `OrderContext.Infrastructure/Services/EmailUniquenessChecker.cs` - Infrastructure implementation
 - `OrderContext.Infrastructure/ClientConfiguration.cs` - EF Core configuration
 
 See the documentation for detailed explanations:
 - [Entity documentation](./docs/Entity.md)
 - [Value Object documentation](./docs/ValueObject.md)
 - [Aggregate documentation](./docs/Aggregate.md)
+- [Domain Service documentation](./docs/DomainService.md)
 
 ## 📖 Learning Path
 
@@ -100,7 +116,7 @@ This is an educational project designed to teach DDD concepts step by step:
 1. **Entities** ✅ - Understanding identity and lifecycle
 2. **Value Objects** ✅ - Immutability and equality
 3. **Aggregates** ✅ - Consistency boundaries and Aggregate Root
-4. **Domain Services** - Cross-entity logic
+4. **Domain Services** ✅ - Cross-entity logic and layer placement
 5. **Repositories** - Data access abstraction
 6. **Domain Events** - Decoupled communication
 
@@ -117,6 +133,9 @@ Each concept is documented with practical implementation examples.
 7. **Ubiquitous Language** - Code reflects business concepts
 8. **Aggregate Design** - Small aggregates, reference by ID
 9. **Value Conversion** - EF Core mapping for value objects
+10. **Domain Services** - Stateless operations for cross-entity logic
+11. **Interface Segregation** - Interfaces in Domain, implementations where needed
+12. **Dependency Injection** - Loose coupling between layers
 
 ## 📚 Resources
 
