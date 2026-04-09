@@ -9,14 +9,17 @@ namespace OrderContext;
 public class Client
 {
     [Key]
-    public Guid Id { get; private set; } 
+    public Guid Id { get; private set; }
     public string Name { get; private set; }
-    public Email Email { get; private set; } 
+    public Email Email { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
+    /// <summary>
+    /// Private constructor for EF Core and internal use. Use the static Create method to instantiate a new Client.
+    /// </summary>
     private Client()
     {
-        
+
     }
     private Client(Guid id, string name, Email email)
     {
@@ -34,7 +37,7 @@ public class Client
     public static Client Create(string name, Email email)
     {
         // Validate the client's name
-        if(string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Name cannot be empty!");
 
         if (email == null)
