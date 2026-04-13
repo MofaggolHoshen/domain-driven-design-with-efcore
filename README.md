@@ -14,7 +14,7 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 2. **[Value Object](./docs/ValueObject.md)** ✅ - Immutable objects defined by their values (Email example)
 3. **[Aggregate](./docs/Aggregate.md)** ✅ - Cluster of objects treated as a unit (Client + Email example)
 4. **[Domain Service](./docs/DomainService.md)** ✅ - Business logic that doesn't belong to entities
-5. **[Repository](./docs/Repository.md)** - Abstraction for data access
+5. **[Repository](./docs/Repository.md)** ✅ - Abstraction for data access
 6. **[Domain Event](./docs/DomainEvent.md)** - Significant occurrences in the domain
 
 > **Note**: Concepts are explained as they are implemented in different branches. Currently on branch: `main`
@@ -24,6 +24,8 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 ### Domain Layer
 - **Client Entity**: Aggregate root with encapsulated business logic
 - **Email Value Object**: Immutable type with built-in validation
+- **Repository Interfaces**: Abstraction for data access (IRepository, IClientRepository)
+- **Unit of Work Interface**: Transaction management across repositories
 - **Domain Services**: Stateless operations for cross-entity business logic
   - `IEmailUniquenessChecker` - Validates email uniqueness across clients
   - `ClientRegistrationService` - Handles client registration with validation
@@ -31,10 +33,21 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 - **DomainException**: Custom exception for domain rule violations
 - **Private Setters**: Enforces encapsulation and prevents invalid state
 - **Factory Methods**: Ensures objects are always created in valid state
-- **Value Conversion**: EF Core mapping for value objects
+
+### Application Layer
+- **Application Services**: Coordinates between domain and infrastructure
+  - `ClientApplicationService` - Client CRUD operations with DTOs
+- **DTOs**: Data transfer objects for external communication
+  - `ClientDto` - Read-only client representation
+  - `PagedResult<T>` - Paginated query results
+- **Dependency Injection**: Service registration for Application layer
 
 ### Infrastructure Layer
 - **EF Core DbContext**: `OrderDbContext` for data persistence
+- **Repository Implementations**: Data access using EF Core
+  - `Repository<T, TId>` - Generic repository base class
+  - `ClientRepository` - Client-specific repository
+  - `UnitOfWork` - Transaction coordination
 - **Fluent API Configuration**: `ClientConfiguration` for entity mapping
 - **Value Object Mapping**: Using `HasConversion` to persist Email as string
 - **Domain Service Implementations**: Infrastructure-dependent implementations
@@ -47,7 +60,8 @@ This project explains DDD concepts incrementally. Each concept is detailed in a 
 - ✅ Aggregate Pattern
 - ✅ Domain Service Pattern
 - ✅ Dependency Injection
-- ✅ Repository Pattern (coming soon)
+- ✅ Repository Pattern
+- ✅ Unit of Work Pattern
 
 ## 🚀 Getting Started
 
@@ -87,6 +101,8 @@ This branch contains the complete implementation of **Domain-Driven Design** tac
 - Entity and Aggregate Root patterns (Client)
 - Value Objects with immutability (Email)
 - Domain Services for cross-entity business logic
+- Repository pattern with Unit of Work
+- Application layer with DTOs and Application Services
 - Infrastructure layer with EF Core persistence
 - Comprehensive unit tests
 
@@ -97,16 +113,29 @@ This branch contains the complete implementation of **Domain-Driven Design** tac
 - `OrderContext.Domain/Email.cs` - Value Object implementation
 - `OrderContext.Domain/Common/ValueObject.cs` - Base class for value objects
 - `OrderContext.Domain/Common/DomainException.cs` - Domain rule violation exception
+- `OrderContext.Domain/Repositories/IRepository.cs` - Generic repository interface
+- `OrderContext.Domain/Repositories/IClientRepository.cs` - Client repository interface
+- `OrderContext.Domain/Repositories/IUnitOfWork.cs` - Unit of Work interface
 - `OrderContext.Domain/Services/IEmailUniquenessChecker.cs` - Domain service interface
 - `OrderContext.Domain/Services/IClientRegistrationService.cs` - Registration service interface
 - `OrderContext.Domain/Services/IClientTransferService.cs` - Transfer service interface
 - `OrderContext.Domain/Services/ClientRegistrationService.cs` - Domain layer implementation
 - `OrderContext.Domain/Services/ClientTransferService.cs` - Domain layer implementation
 
+#### Application Layer
+- `OrderContext.Application/DTOs/ClientDto.cs` - Client data transfer object
+- `OrderContext.Application/DTOs/PagedResult.cs` - Paginated result wrapper
+- `OrderContext.Application/Services/ClientApplicationService.cs` - Application service
+- `OrderContext.Application/DependencyInjection.cs` - DI registration
+
 #### Infrastructure Layer
+- `OrderContext.Infrastructure/Repositories/Repository.cs` - Generic repository implementation
+- `OrderContext.Infrastructure/Repositories/ClientRepository.cs` - Client repository implementation
+- `OrderContext.Infrastructure/Repositories/UnitOfWork.cs` - Unit of Work implementation
 - `OrderContext.Infrastructure/Services/EmailUniquenessChecker.cs` - Infrastructure implementation
-- `OrderContext.Infrastructure/ClientConfiguration.cs` - EF Core configuration
+- `OrderContext.Infrastructure/Configurations/ClientConfiguration.cs` - EF Core configuration
 - `OrderContext.Infrastructure/OrderDbContext.cs` - EF Core DbContext
+- `OrderContext.Infrastructure/DependencyInjection.cs` - DI registration
 
 #### Tests
 - `OrderContext.Tests/ClientTest.cs` - Client entity tests
@@ -120,6 +149,7 @@ See the documentation for detailed explanations:
 - [Value Object documentation](./docs/ValueObject.md)
 - [Aggregate documentation](./docs/Aggregate.md)
 - [Domain Service documentation](./docs/DomainService.md)
+- [Repository documentation](./docs/Repository.md)
 
 ## 📖 Learning Path
 
@@ -129,7 +159,7 @@ This is an educational project designed to teach DDD concepts step by step:
 2. **Value Objects** ✅ - Immutability and equality
 3. **Aggregates** ✅ - Consistency boundaries and Aggregate Root
 4. **Domain Services** ✅ - Cross-entity logic and layer placement
-5. **Repositories** - Data access abstraction
+5. **Repositories** ✅ - Data access abstraction with Unit of Work
 6. **Domain Events** - Decoupled communication
 
 Each concept is documented with practical implementation examples.
@@ -140,7 +170,7 @@ Each concept is documented with practical implementation examples.
 2. **Validation** - Always in the domain, not just UI/API
 3. **Factory Methods** - Controlled object creation
 4. **Immutability** - For value objects
-5. **Separation of Concerns** - Domain vs Infrastructure
+5. **Separation of Concerns** - Domain vs Application vs Infrastructure
 6. **Rich Domain Model** - Business logic in the domain
 7. **Ubiquitous Language** - Code reflects business concepts
 8. **Aggregate Design** - Small aggregates, reference by ID
@@ -148,6 +178,9 @@ Each concept is documented with practical implementation examples.
 10. **Domain Services** - Stateless operations for cross-entity logic
 11. **Interface Segregation** - Interfaces in Domain, implementations where needed
 12. **Dependency Injection** - Loose coupling between layers
+13. **Repository Pattern** - Collection-like interface for aggregate persistence
+14. **Unit of Work** - Atomic transactions across multiple repositories
+15. **DTOs** - Data transfer objects for layer boundaries
 
 ## 📚 Resources
 
