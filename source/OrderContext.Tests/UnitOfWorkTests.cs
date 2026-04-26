@@ -76,6 +76,30 @@ public class UnitOfWorkTests
 
     #endregion
 
+    #region Transaction Rollback Tests
+
+    [Fact]
+    public async Task RollbackTransactionAsync_DoesNotPersistChanges()
+    {
+        // Arrange
+        using var context = CreateDbContext();
+        using var unitOfWork = new UnitOfWork(context);
+        var email = Email.Create("rollback@example.com");
+        var client = Client.Create("Rollback Client", email);
+
+        // Act
+        await unitOfWork.BeginTransactionAsync();
+        await unitOfWork.Clients.AddAsync(client);
+        // Do NOT call SaveChangesAsync before rollback
+        await unitOfWork.RollbackTransactionAsync();
+
+        // Assert
+        var found = await context.Clients.FindAsync(client.Id);
+        Assert.Null(found);
+    }
+
+    #endregion
+
     #region Clients Repository Property Tests
 
     [Fact]
